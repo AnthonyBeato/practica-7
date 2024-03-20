@@ -60,8 +60,10 @@ export class AppComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
             this.errorMessage = error.error.errorMessage;
+            alert(this.errorMessage);
           } else {
             this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+            alert(this.errorMessage);
           }
         }
       }
@@ -80,6 +82,7 @@ export class AppComponent implements OnInit {
       error: (error: HttpErrorResponse) => {
         if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
           this.errorMessage = error.error.errorMessage;
+          alert(this.errorMessage);
         } else {
           this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
         }
@@ -114,8 +117,10 @@ export class AppComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
             this.errorMessage = error.error.errorMessage;
+            alert(this.errorMessage);
           } else {
             this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+            alert(this.errorMessage);
           }
         }
       }
@@ -131,8 +136,10 @@ export class AppComponent implements OnInit {
       error: (error: HttpErrorResponse) => {
         if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
           this.errorMessage = error.error.errorMessage;
+          alert(this.errorMessage);
         } else {
           this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+          alert(this.errorMessage);
         }
       }
     });
