@@ -11,7 +11,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { JsonPipe } from '@angular/common';
 
 
-
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -40,6 +39,8 @@ export class AppComponent implements OnInit {
 
   fechaInicio: Date = new Date();
   fechaFin: Date = new Date();
+  errorMessage: string = '';
+
 
   constructor(private reservationService: ReservationService){}
 
@@ -55,7 +56,11 @@ export class AppComponent implements OnInit {
         },
 
         error: (error: HttpErrorResponse) => {
-          alert(error.error.errorMessage);
+          if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
+            this.errorMessage = error.error.errorMessage;
+          } else {
+            this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+          }
         }
       }
     )
@@ -71,8 +76,11 @@ export class AppComponent implements OnInit {
         addForm.reset();
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.error.errorMessage);
-        addForm.reset();
+        if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
+          this.errorMessage = error.error.errorMessage;
+        } else {
+          this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+        }
       }
     }     
     )
@@ -101,7 +109,11 @@ export class AppComponent implements OnInit {
       },
 
       error: (error: HttpErrorResponse) => {
-        alert(error.error.errorMessage);
+        if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
+          this.errorMessage = error.error.errorMessage;
+        } else {
+          this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+        }
       }
     });
   }
