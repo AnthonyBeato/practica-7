@@ -8,13 +8,13 @@ import { ReservationService } from './reservation.service';
 import { DataTablesModule } from 'angular-datatables';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, NgIf } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, HttpClientModule, DataTablesModule, MatFormFieldModule, MatDatepickerModule, ReactiveFormsModule, JsonPipe],
+  imports: [RouterOutlet, FormsModule, HttpClientModule, DataTablesModule, MatFormFieldModule, MatDatepickerModule, ReactiveFormsModule, JsonPipe, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
   fechaInicio: Date = new Date();
   fechaFin: Date = new Date();
   errorMessage: string = '';
+  mostrarBotonAgregar: boolean = true;
 
 
   constructor(private reservationService: ReservationService){}
@@ -50,6 +51,7 @@ export class AppComponent implements OnInit {
   }
 
   public getReservations(): void {
+    this.mostrarBotonAgregar = true;
     this.reservationService.getReservationsActive().subscribe({
         next: (response: Reservation[]) => {
           this.reservations = response;
@@ -102,7 +104,25 @@ export class AppComponent implements OnInit {
     button.click();
   }
 
-  getReservationsPasts(startDate: Date, endDate: Date): void {
+  public getReservationsPasts(): void {
+    this.mostrarBotonAgregar = false;
+    this.reservationService.getReservationsPasts(null, null).subscribe({
+        next: (response: Reservation[]) => {
+          this.reservations = response;
+        },
+
+        error: (error: HttpErrorResponse) => {
+          if (error instanceof HttpErrorResponse && error.error && error.error.errorMessage) {
+            this.errorMessage = error.error.errorMessage;
+          } else {
+            this.errorMessage = 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+          }
+        }
+      }
+    )
+  }
+  
+  fetchReservationsPasts(startDate: Date, endDate: Date): void {
     this.reservationService.getReservationsPasts(startDate, endDate).subscribe({
       next: (response: Reservation[]) => {
         this.reservations = response;
@@ -126,9 +146,8 @@ export class AppComponent implements OnInit {
       console.log(this.fechaInicio);
       console.log(this.fechaFin);
 
-
       // Llamando a la función para obtener las reservaciones pasadas
-      this.getReservationsPasts(this.fechaInicio, this.fechaFin);
+      this.fetchReservationsPasts(this.fechaInicio, this.fechaFin);
     }
   }
 

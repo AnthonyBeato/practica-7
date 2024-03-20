@@ -16,12 +16,18 @@ export class ReservationService{
         return this.http.get<Reservation[]>(`${this.apiServerUrl}/ReservationServerless/active`);
     }
 
-    public getReservationsPasts(startDate: Date, endDate: Date): Observable<Reservation[]> {
-        const formattedStartDate: string = this.formatDate(startDate);
-        const formattedEndDate: string = this.formatDate(endDate);
-    
+    public getReservationsPasts(startDate: Date | null, endDate: Date | null): Observable<Reservation[]> {
+ 
+        var url: string = '';
+        
+        if (startDate != null || endDate != null){
+            const formattedStartDate: string = this.formatDate(startDate!);
+            const formattedEndDate: string = this.formatDate(endDate!);
 
-        return this.http.get<Reservation[]>(`${this.apiServerUrl}/ReservationServerless/past?startDate=${formattedStartDate}&endDate=${formattedEndDate}`);
+            url = `?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+        }    
+
+        return this.http.get<Reservation[]>(`${this.apiServerUrl}/ReservationServerless/past${url}`);
     }
 
     public addReservation(reservation: Reservation): Observable<Reservation>{
